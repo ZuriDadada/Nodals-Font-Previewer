@@ -1,0 +1,64 @@
+
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nodals Font</title>
+</head>
+
+<body>
+    <header>
+        <h1>Nodals Font</h1>
+        <p>Font Previewer</p>
+    </header>
+
+    <main>
+        <!-- 字體管理區 -->
+        <section id="font-manager">
+            <h2>字體管理</h2>
+
+            <input
+                type="file"
+                id="font-upload"
+                accept=".ttf,.otf,.woff,.woff2"
+                multiple
+            >
+
+            <div id="font-list">
+                尚未載入字體
+            </div>
+        </section>
+
+        <!-- 文本編輯區 -->
+        <section id="editor">
+            <h2>文本編輯</h2>
+
+            <div id="editor-blocks">
+                <div class="editor-block">
+                    <label>選擇字體：</label>
+                    <select class="font-select">
+                        <option value="">尚未載入字體</option>
+                    </select>
+
+                    <label>輸入文本：</label>
+                    <textarea placeholder="請輸入預覽文字……"></textarea>
+                </div>
+            </div>
+
+            <button id="add-block">新增文本區塊</button>
+        </section>
+
+        <!-- 預覽區 -->
+        <section id="preview">
+            <h2>字體預覽</h2>
+
+            <div id="preview-area">
+                預覽內容將顯示於此
+            </div>
+        </section>
+    </main>
+
+    <script src="app.js"></script>
+</body>
+</html>
