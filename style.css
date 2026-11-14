@@ -1,0 +1,67 @@
+
+/* Page Layout */
+
+body {
+    padding: 32px 18px;
+}
+
+/* Header */
+
+header {
+    margin-bottom: 32px;
+    text-align: center;
+}
+
+header h1 {
+    margin-bottom: 8px;
+}
+
+header p {
+    color: var(--muted);
+}
+
+/* Main Layout */
+
+main {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+    width: min(1100px, 100%);
+}
+
+/* Sections */
+
+section {
+    padding: 24px;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    background: var(--panel);
+    box-shadow: 0 10px 30px var(--shadow);
+}
+
+section h2 {
+    margin-top: 0;
+    color: var(--primary);
+}
+
+/* Font Manager */
+
+#font-manager {
+    grid-column: 1 / -1;
+}
+
+/* Responsive */
+
+@media (max-width: 640px) {
+    body {
+        padding: 24px 16px;
+    }
+
+    main {
+        grid-template-columns: 1fr;
+    }
+
+    #font-manager {
+        grid-column: auto;
+    }
+}
