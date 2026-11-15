@@ -100,8 +100,6 @@ function updatePreview() {
         const fontSelect = block.querySelector(".font-select");
         const fontSize = block.querySelector(".font-size");
         const fontWeight = block.querySelector(".font-weight");
-        const fontSizeValue = block.querySelector(".font-size-value");
-        const fontWeightValue = block.querySelector(".font-weight-value");
         const textarea = block.querySelector("textarea");
 
         const previewText = document.createElement("p");
@@ -115,9 +113,6 @@ function updatePreview() {
         previewText.style.fontSize = `${fontSize.value}px`;
         previewText.style.fontWeight = fontWeight.value;
 
-        fontSizeValue.textContent = fontSize.value;
-        fontWeightValue.textContent = fontWeight.value;
-
         previewArea.appendChild(previewText);
     });
 }
@@ -125,18 +120,54 @@ function updatePreview() {
 // Listen for editor changes
 
 document.addEventListener("input", event => {
-    if (
-        event.target.matches(".font-select") ||
-        event.target.matches(".font-size") ||
-        event.target.matches(".font-weight") ||
-        event.target.matches(".editor-block textarea")
+    const target = event.target;
+    const block = target.closest(".editor-block");
+
+    if (!block) {
+        return;
+    }
+
+    if (target.matches(".font-size")) {
+        block.querySelector(".font-size-number").value = target.value;
+        updatePreview();
+    } else if (target.matches(".font-size-number")) {
+        if (target.value !== "") {
+            block.querySelector(".font-size").value = target.value;
+        }
+        updatePreview();
+    } else if (target.matches(".font-weight")) {
+        block.querySelector(".font-weight-number").value = target.value;
+        updatePreview();
+    } else if (target.matches(".font-weight-number")) {
+        if (target.value !== "") {
+            block.querySelector(".font-weight").value = target.value;
+        }
+        updatePreview();
+    } else if (
+        target.matches(".font-select") ||
+        target.matches(".editor-block textarea")
     ) {
         updatePreview();
     }
 });
 
 document.addEventListener("change", event => {
-    if (event.target.matches(".font-select")) {
+    const target = event.target;
+
+    if (target.matches(".font-select")) {
+        updatePreview();
+    }
+
+    if (
+        target.matches(".font-size-number") ||
+        target.matches(".font-weight-number")
+    ) {
+        const block = target.closest(".editor-block");
+        const range = target.matches(".font-size-number")
+            ? block.querySelector(".font-size")
+            : block.querySelector(".font-weight");
+
+        target.value = range.value;
         updatePreview();
     }
 });
@@ -172,12 +203,10 @@ addBlockButton.addEventListener("click", () => {
     const newBlock = document.querySelector(".editor-block").cloneNode(true);
 
     newBlock.querySelector(".font-select").value = "";
-    newBlock.querySelector(".font-select").value = "";
     newBlock.querySelector(".font-size").value = "24";
     newBlock.querySelector(".font-weight").value = "400";
-    newBlock.querySelector(".font-size-value").textContent = "24";
-    newBlock.querySelector(".font-weight-value").textContent = "400";
-    newBlock.querySelector("textarea").value = "";
+    newBlock.querySelector(".font-size-number").value = "24";
+    newBlock.querySelector(".font-weight-number").value = "400";
     newBlock.querySelector("textarea").value = "";
 
     editorBlocks.appendChild(newBlock);
