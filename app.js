@@ -98,14 +98,25 @@ function updatePreview() {
 
     editorBlocks.forEach(block => {
         const fontSelect = block.querySelector(".font-select");
+        const fontSize = block.querySelector(".font-size");
+        const fontWeight = block.querySelector(".font-weight");
+        const fontSizeValue = block.querySelector(".font-size-value");
+        const fontWeightValue = block.querySelector(".font-weight-value");
         const textarea = block.querySelector("textarea");
 
         const previewText = document.createElement("p");
 
         previewText.textContent = textarea.value;
+
         previewText.style.fontFamily = fontSelect.value
             ? `"${fontSelect.value}"`
             : "inherit";
+
+        previewText.style.fontSize = `${fontSize.value}px`;
+        previewText.style.fontWeight = fontWeight.value;
+
+        fontSizeValue.textContent = fontSize.value;
+        fontWeightValue.textContent = fontWeight.value;
 
         previewArea.appendChild(previewText);
     });
@@ -116,6 +127,8 @@ function updatePreview() {
 document.addEventListener("input", event => {
     if (
         event.target.matches(".font-select") ||
+        event.target.matches(".font-size") ||
+        event.target.matches(".font-weight") ||
         event.target.matches(".editor-block textarea")
     ) {
         updatePreview();
@@ -159,6 +172,12 @@ addBlockButton.addEventListener("click", () => {
     const newBlock = document.querySelector(".editor-block").cloneNode(true);
 
     newBlock.querySelector(".font-select").value = "";
+    newBlock.querySelector(".font-select").value = "";
+    newBlock.querySelector(".font-size").value = "24";
+    newBlock.querySelector(".font-weight").value = "400";
+    newBlock.querySelector(".font-size-value").textContent = "24";
+    newBlock.querySelector(".font-weight-value").textContent = "400";
+    newBlock.querySelector("textarea").value = "";
     newBlock.querySelector("textarea").value = "";
 
     editorBlocks.appendChild(newBlock);
