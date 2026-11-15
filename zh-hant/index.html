@@ -50,7 +50,8 @@
                         <option value="">請選擇字體</option>
                     </select>
                     
-                    <label>字級：<span class="font-size-value">24</span> px</label>
+                    <label>字級：</label>
+                    <div class="slider-control">
                         <input
                             type="range"
                             class="font-size"
@@ -59,16 +60,36 @@
                             value="24"
                             step="1"
                         >
+                        <input
+                            type="number"
+                            class="font-size-number"
+                            min="8"
+                            max="96"
+                            value="24"
+                            step="1"
+                        >
+                        <span>px</span>
+                    </div>
 
-                   <label>字重：<span class="font-weight-value">400</span></label>
-                       <input
-                           type="range"
-                           class="font-weight"
-                           min="100"
-                           max="900"
-                           value="400"
-                           step="100"
-                       >
+                    <label>字重：</label>
+                    <div class="slider-control">
+                        <input
+                            type="range"
+                            class="font-weight"
+                            min="100"
+                            max="900"
+                            value="400"
+                            step="100"
+                        >
+                        <input
+                            type="number"
+                            class="font-weight-number"
+                            min="100"
+                            max="900"
+                            value="400"
+                            step="100"
+                        >
+                    </div>
 
                     <label>輸入文本：</label>
                     <textarea placeholder="請輸入預覽文字……"></textarea>
