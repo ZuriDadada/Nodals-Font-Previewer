@@ -142,6 +142,27 @@ textarea:focus {
     background: var(--accent);
 }
 
+/* Delete Button */
+
+.delete-block {
+    align-self: flex-end;
+    padding: 8px 12px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    color: var(--muted);
+    background: transparent;
+    font: inherit;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.delete-block:hover {
+    color: var(--text);
+    background: var(--panel);
+    border-color: var(--primary-soft);
+}
+
 /* Preview */
 
 #preview-area {
