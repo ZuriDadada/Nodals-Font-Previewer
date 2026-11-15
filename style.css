@@ -175,3 +175,12 @@ textarea:focus {
     white-space: pre-wrap;
     overflow-wrap: anywhere;
 }
+
+/* Range Sliders */
+
+input[type="range"] {
+    width: 100%;
+    margin: 8px 0;
+    accent-color: var(--primary);
+    cursor: pointer;
+}
