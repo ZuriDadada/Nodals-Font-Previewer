@@ -184,3 +184,26 @@ input[type="range"] {
     accent-color: var(--primary);
     cursor: pointer;
 }
+
+/* Slider Controls */
+
+.slider-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.slider-control input[type="range"] {
+    flex: 1;
+    min-width: 0;
+    width: auto;
+}
+
+.slider-control input[type="number"] {
+    width: 76px;
+    padding: 8px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    color: var(--text);
+    background: #fffaf3;
+}
