@@ -50,6 +50,91 @@ fontUpload.addEventListener("change", async (event) => {
     fontUpload.value = "";
 });
 
+// Load font from URL
+
+const fontURL = document.getElementById("font-url");
+const loadFontURLButton = document.getElementById("load-font-url");
+const fontURLStatus = document.getElementById("font-url-status");
+
+loadFontURLButton.addEventListener("click", async () => {
+    const url = fontURL.value.trim();
+
+    if (!url) {
+        fontURLStatus.textContent = "請先輸入字體下載地址";
+        return;
+    }
+
+    let objectURL;
+
+    try {
+        const parsedURL = new URL(url);
+
+        if (
+            parsedURL.protocol !== "https:" &&
+            parsedURL.protocol !== "http:"
+        ) {
+            throw new Error("不支援的網址格式");
+        }
+
+        const fileName = decodeURIComponent(
+            parsedURL.pathname.split("/").pop()
+        );
+
+        const fontName = fileName.replace(/\.[^/.]+$/, "") || "遠端字體";
+
+        if (loadedFonts.some(font => font.name === fontName)) {
+            fontURLStatus.textContent = "這個字體已經載入了";
+            return;
+        }
+
+        fontURLStatus.textContent = "正在載入……";
+        loadFontURLButton.disabled = true;
+
+        const response = await fetch(parsedURL.href);
+
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+        }
+
+        const blob = await response.blob();
+        objectURL = URL.createObjectURL(blob);
+
+        const fontFace = new FontFace(
+            fontName,
+            `url("${objectURL}")`
+        );
+
+        await fontFace.load();
+        document.fonts.add(fontFace);
+
+        loadedFonts.push({
+            name: fontName,
+            file: null,
+            fontFace: fontFace,
+            objectURL: objectURL
+        });
+
+        updateFontList();
+        updateFontSelects();
+
+        fontURLStatus.textContent = "字體載入成功！";
+        fontURL.value = "";
+
+    } catch (error) {
+        if (objectURL) {
+            URL.revokeObjectURL(objectURL);
+        }
+
+        fontURLStatus.textContent =
+            "載入失敗，請檢查網址或伺服器的跨來源存取設定";
+
+        console.error("Failed to load remote font:", error);
+
+    } finally {
+        loadFontURLButton.disabled = false;
+    }
+});
+
 // Update font list
 
 function updateFontList() {
