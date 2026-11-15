@@ -19,25 +19,30 @@ fontUpload.addEventListener("change", async (event) => {
         if (loadedFonts.some(font => font.name === fontName)) {
             continue;
         }
+        
+        const objectURL = URL.createObjectURL(file);
 
         const fontFace = new FontFace(
             fontName,
-            `url("${URL.createObjectURL(file)}")`
+            `url("${objectURL}")`
         );
-
+        
         try {
             await fontFace.load();
             document.fonts.add(fontFace);
 
             loadedFonts.push({
                 name: fontName,
-                file: file
+                file: file,
+                fontFace: fontFace,
+                objectURL: objectURL
             });
 
             updateFontList();
             updateFontSelects();
 
         } catch (error) {
+            URL.revokeObjectURL(objectURL);
             console.error(`Failed to load font: ${fontName}`, error);
         }
     }
@@ -56,11 +61,59 @@ function updateFontList() {
     }
 
     loadedFonts.forEach(font => {
+        const item = document.createElement("div");
+        item.className = "font-item";
+
+        const name = document.createElement("span");
+        name.textContent = font.name;
+
+        const deleteButton = document.createElement("button");
+        deleteButton.className = "delete-font";
+        deleteButton.textContent = "刪除";
+        deleteButton.dataset.fontName = font.name;
+
+        item.appendChild(name);
+        item.appendChild(deleteButton);
+
+        fontList.appendChild(item);
+    });
+}
+
+    loadedFonts.forEach(font => {
         const item = document.createElement("p");
         item.textContent = font.name;
         fontList.appendChild(item);
     });
 }
+
+// Delete loaded font
+
+fontList.addEventListener("click", event => {
+    if (!event.target.matches(".delete-font")) {
+        return;
+    }
+
+    const fontName = event.target.dataset.fontName;
+
+    const index = loadedFonts.findIndex(
+        font => font.name === fontName
+    );
+
+    if (index === -1) {
+        return;
+    }
+
+    const font = loadedFonts[index];
+
+    document.fonts.delete(font.fontFace);
+    URL.revokeObjectURL(font.objectURL);
+
+    loadedFonts.splice(index, 1);
+
+    updateFontList();
+    updateFontSelects();
+    updatePreview();
+});
 
 // Update font selectors
 
