@@ -27,12 +27,23 @@
         <section id="font-manager">
             <h2>字體管理</h2>
 
-            <input
-                type="file"
-                id="font-upload"
-                accept=".ttf,.otf,.woff,.woff2"
-                multiple
-            >
+            <div class="font-upload-control">
+                <input
+                    type="file"
+                    id="font-upload"
+                    accept=".ttf,.otf,.woff,.woff2"
+                    multiple
+                >
+            </div>
+
+            <div class="font-url-control">
+                <input
+                    type="url"
+                    id="font-url"
+                    placeholder="請輸入字體下載地址……"
+                >
+                <button id="load-font-url">載入字體</button>
+            </div>
 
             <div id="font-list">
                 尚未載入字體
