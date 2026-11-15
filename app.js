@@ -133,18 +133,53 @@ document.addEventListener("change", event => {
 const addBlockButton = document.getElementById("add-block");
 const editorBlocks = document.getElementById("editor-blocks");
 
+// Create delete buttons
+
+function updateDeleteButtons() {
+    document.querySelectorAll(".editor-block").forEach(block => {
+        let deleteButton = block.querySelector(".delete-block");
+
+        if (!deleteButton) {
+            deleteButton = document.createElement("button");
+            deleteButton.className = "delete-block";
+            deleteButton.textContent = "刪除區塊";
+
+            block.appendChild(deleteButton);
+        }
+    });
+}
+
+// Add initial delete button
+
+updateDeleteButtons();
+
+// Add new editor block
+
 addBlockButton.addEventListener("click", () => {
-    // Copy the existing editor block
     const newBlock = document.querySelector(".editor-block").cloneNode(true);
 
-    // Reset the copied controls
     newBlock.querySelector(".font-select").value = "";
     newBlock.querySelector("textarea").value = "";
 
-    // Add the new block
     editorBlocks.appendChild(newBlock);
 
-    // Update font selectors and preview
     updateFontSelects();
     updatePreview();
+});
+
+// Delete editor block
+
+editorBlocks.addEventListener("click", event => {
+    if (event.target.matches(".delete-block")) {
+        const blocks = document.querySelectorAll(".editor-block");
+
+        // Keep at least one editor block
+        if (blocks.length <= 1) {
+            return;
+        }
+
+        event.target.closest(".editor-block").remove();
+
+        updatePreview();
+    }
 });
