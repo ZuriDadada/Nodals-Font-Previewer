@@ -79,13 +79,6 @@ function updateFontList() {
     });
 }
 
-    loadedFonts.forEach(font => {
-        const item = document.createElement("p");
-        item.textContent = font.name;
-        fontList.appendChild(item);
-    });
-}
-
 // Delete loaded font
 
 fontList.addEventListener("click", event => {
