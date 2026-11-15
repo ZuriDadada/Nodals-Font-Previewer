@@ -127,3 +127,24 @@ document.addEventListener("change", event => {
         updatePreview();
     }
 });
+
+// Add editor block
+
+const addBlockButton = document.getElementById("add-block");
+const editorBlocks = document.getElementById("editor-blocks");
+
+addBlockButton.addEventListener("click", () => {
+    // Copy the existing editor block
+    const newBlock = document.querySelector(".editor-block").cloneNode(true);
+
+    // Reset the copied controls
+    newBlock.querySelector(".font-select").value = "";
+    newBlock.querySelector("textarea").value = "";
+
+    // Add the new block
+    editorBlocks.appendChild(newBlock);
+
+    // Update font selectors and preview
+    updateFontSelects();
+    updatePreview();
+});
