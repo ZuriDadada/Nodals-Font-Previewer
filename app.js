@@ -87,3 +87,43 @@ function updateFontSelects() {
             : "";
     });
 }
+
+// Update font preview
+
+function updatePreview() {
+    const previewArea = document.getElementById("preview-area");
+    const editorBlocks = document.querySelectorAll(".editor-block");
+
+    previewArea.replaceChildren();
+
+    editorBlocks.forEach(block => {
+        const fontSelect = block.querySelector(".font-select");
+        const textarea = block.querySelector("textarea");
+
+        const previewText = document.createElement("p");
+
+        previewText.textContent = textarea.value;
+        previewText.style.fontFamily = fontSelect.value
+            ? `"${fontSelect.value}"`
+            : "inherit";
+
+        previewArea.appendChild(previewText);
+    });
+}
+
+// Listen for editor changes
+
+document.addEventListener("input", event => {
+    if (
+        event.target.matches(".font-select") ||
+        event.target.matches(".editor-block textarea")
+    ) {
+        updatePreview();
+    }
+});
+
+document.addEventListener("change", event => {
+    if (event.target.matches(".font-select")) {
+        updatePreview();
+    }
+});
