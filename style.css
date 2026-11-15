@@ -234,3 +234,69 @@ input[type="range"] {
     color: var(--text);
     background: var(--panel);
 }
+
+/* Font Upload */
+
+#font-upload {
+    width: 100%;
+    padding: 12px;
+    border: 1px dashed var(--primary-soft);
+    border-radius: 12px;
+    background: var(--panel-strong);
+}
+
+#font-upload::file-selector-button {
+    margin-right: 12px;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    background: var(--primary);
+    font: inherit;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+#font-upload::file-selector-button:hover {
+    background: var(--accent);
+}
+
+/* Font URL */
+
+.font-url-control {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+#font-url {
+    flex: 1;
+    min-width: 0;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    color: var(--text);
+    background: #fffaf3;
+    font: inherit;
+}
+
+#load-font-url {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 10px;
+    color: white;
+    background: var(--primary);
+    font: inherit;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+#load-font-url:hover {
+    background: var(--accent);
+}
+
+@media (max-width: 480px) {
+    .font-url-control {
+        flex-direction: column;
+    }
+    }
