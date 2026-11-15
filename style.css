@@ -75,14 +75,6 @@ textarea {
     font: inherit;
 }
 
-#font-upload {
-    width: 100%;
-    padding: 12px;
-    border: 1px dashed var(--primary-soft);
-    border-radius: 12px;
-    background: var(--panel-strong);
-}
-
 /* Editor */
 
 .editor-block {
@@ -300,3 +292,9 @@ input[type="range"] {
         flex-direction: column;
     }
     }
+
+#font-url-status {
+    margin: 8px 0 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+}
