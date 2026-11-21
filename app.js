@@ -1,4 +1,3 @@
-
 // Font Manager
 
 const fontUpload = document.getElementById("font-upload");
@@ -23,8 +22,19 @@ async function loadFont(blob, fontName, file = null) {
     );
 
     try {
+        await fontFace.load();
+        document.fonts.add(fontFace);
+
+        loadedFonts.push({
+            name: fontName,
+            file: file,
+            fontFace: fontFace,
+            objectURL: objectURL
+        });
+
         updateFontList();
         updateFontSelects();
+        updatePreview();
 
         return true;
 
@@ -84,7 +94,7 @@ async function loadZip(file, fileName = "遠端 ZIP") {
     } catch (error) {
         console.error("Failed to load ZIP:", fileName, error);
     }
-                            }
+}
 
 // Upload fonts
 
@@ -92,13 +102,13 @@ fontUpload.addEventListener("change", async (event) => {
     const files = Array.from(event.target.files);
 
     for (const file of files) {
-    if (/\.zip$/i.test(file.name)) {
-        await loadZip(file, file.name);
-    } else {
-        const fontName = file.name.replace(/\.[^/.]+$/, "");
+        if (/\.zip$/i.test(file.name)) {
+            await loadZip(file, file.name);
+        } else {
+            const fontName = file.name.replace(/\.[^/.]+$/, "");
 
-        await loadFont(file, fontName, file);
-    }
+            await loadFont(file, fontName, file);
+        }
     }
 
     fontUpload.value = "";
@@ -108,13 +118,13 @@ fontUpload.addEventListener("change", async (event) => {
 
 const fontURL = document.getElementById("font-url");
 const loadFontURLButton = document.getElementById("load-font-url");
-const fontURLStatus = document.getElementById("font-url-status");
+const loadFontURLStatus = document.getElementById("font-url-status");
 
 loadFontURLButton.addEventListener("click", async () => {
     const url = fontURL.value.trim();
 
     if (!url) {
-        fontURLStatus.textContent = "請先輸入字體下載地址";
+        loadFontURLStatus.textContent = "請先輸入字體下載地址";
         return;
     }
 
@@ -134,12 +144,7 @@ loadFontURLButton.addEventListener("click", async () => {
 
         const fontName = fileName.replace(/\.[^/.]+$/, "") || "遠端字體";
 
-        if (loadedFonts.some(font => font.name === fontName)) {
-            fontURLStatus.textContent = "這個字體已經載入了";
-            return;
-        }
-
-        fontURLStatus.textContent = "正在載入……";
+        loadFontURLStatus.textContent = "正在載入……";
         loadFontURLButton.disabled = true;
 
         const response = await fetch(parsedURL.href);
@@ -153,7 +158,7 @@ loadFontURLButton.addEventListener("click", async () => {
         if (/\.zip$/i.test(fileName)) {
             await loadZip(blob, fileName);
 
-            fontURLStatus.textContent = "ZIP 檔案處理完成！";
+            loadFontURLStatus.textContent = "ZIP 檔案處理完成！";
             fontURL.value = "";
             return;
         }
@@ -164,24 +169,11 @@ loadFontURLButton.addEventListener("click", async () => {
             throw new Error("字體載入失敗或已經存在");
         }
 
-        await fontFace.load();
-        document.fonts.add(fontFace);
-
-        loadedFonts.push({
-            name: fontName,
-            file: null,
-            fontFace: fontFace,
-            objectURL: objectURL
-        });
-
-        updateFontList();
-        updateFontSelects();
-
-        fontURLStatus.textContent = "字體載入成功！";
+        loadFontURLStatus.textContent = "字體載入成功！";
         fontURL.value = "";
 
     } catch (error) {
-        fontURLStatus.textContent =
+        loadFontURLStatus.textContent =
             "載入失敗，請檢查網址或伺服器的跨來源存取設定";
 
         console.error("Failed to load remote font:", error);
