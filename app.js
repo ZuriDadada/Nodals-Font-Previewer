@@ -23,16 +23,6 @@ async function loadFont(blob, fontName, file = null) {
     );
 
     try {
-        await fontFace.load();
-        document.fonts.add(fontFace);
-
-        loadedFonts.push({
-            name: fontName,
-            file: file,
-            fontFace: fontFace,
-            objectURL: objectURL
-        });
-
         updateFontList();
         updateFontSelects();
 
@@ -128,8 +118,6 @@ loadFontURLButton.addEventListener("click", async () => {
         return;
     }
 
-    let objectURL;
-
     try {
         const parsedURL = new URL(url);
 
@@ -193,10 +181,6 @@ loadFontURLButton.addEventListener("click", async () => {
         fontURL.value = "";
 
     } catch (error) {
-        if (objectURL) {
-            URL.revokeObjectURL(objectURL);
-        }
-
         fontURLStatus.textContent =
             "載入失敗，請檢查網址或伺服器的跨來源存取設定";
 
