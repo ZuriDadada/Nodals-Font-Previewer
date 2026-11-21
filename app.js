@@ -7,6 +7,45 @@ const fontSelects = document.querySelectorAll(".font-select");
 
 const loadedFonts = [];
 
+// Load a font
+
+async function loadFont(blob, fontName, file = null) {
+    // Avoid duplicate fonts
+    if (loadedFonts.some(font => font.name === fontName)) {
+        return false;
+    }
+
+    const objectURL = URL.createObjectURL(blob);
+
+    const fontFace = new FontFace(
+        fontName,
+        `url("${objectURL}")`
+    );
+
+    try {
+        await fontFace.load();
+        document.fonts.add(fontFace);
+
+        loadedFonts.push({
+            name: fontName,
+            file: file,
+            fontFace: fontFace,
+            objectURL: objectURL
+        });
+
+        updateFontList();
+        updateFontSelects();
+
+        return true;
+
+    } catch (error) {
+        URL.revokeObjectURL(objectURL);
+        console.error(`Failed to load font: ${fontName}`, error);
+
+        return false;
+    }
+}
+
 // Upload fonts
 
 fontUpload.addEventListener("change", async (event) => {
@@ -15,36 +54,7 @@ fontUpload.addEventListener("change", async (event) => {
     for (const file of files) {
         const fontName = file.name.replace(/\.[^/.]+$/, "");
 
-        // Avoid duplicate fonts
-        if (loadedFonts.some(font => font.name === fontName)) {
-            continue;
-        }
-        
-        const objectURL = URL.createObjectURL(file);
-
-        const fontFace = new FontFace(
-            fontName,
-            `url("${objectURL}")`
-        );
-        
-        try {
-            await fontFace.load();
-            document.fonts.add(fontFace);
-
-            loadedFonts.push({
-                name: fontName,
-                file: file,
-                fontFace: fontFace,
-                objectURL: objectURL
-            });
-
-            updateFontList();
-            updateFontSelects();
-
-        } catch (error) {
-            URL.revokeObjectURL(objectURL);
-            console.error(`Failed to load font: ${fontName}`, error);
-        }
+        await loadFont(file, fontName, file);
     }
 
     fontUpload.value = "";
