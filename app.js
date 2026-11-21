@@ -91,8 +91,9 @@ async function loadZip(file, fileName = "遠端 ZIP") {
             await loadFont(blob, fontName);
         }
 
-    } catch (error) {
+        } catch (error) {
         console.error("Failed to load ZIP:", fileName, error);
+        throw error;
     }
 }
 
@@ -101,14 +102,26 @@ async function loadZip(file, fileName = "遠端 ZIP") {
 fontUpload.addEventListener("change", async (event) => {
     const files = Array.from(event.target.files);
 
-    for (const file of files) {
-        if (/\.zip$/i.test(file.name)) {
-            await loadZip(file, file.name);
-        } else {
-            const fontName = file.name.replace(/\.[^/.]+$/, "");
+    loadFontURLStatus.textContent = "正在載入……";
 
-            await loadFont(file, fontName, file);
+    try {
+        for (const file of files) {
+            if (/\.zip$/i.test(file.name)) {
+                await loadZip(file, file.name);
+            } else {
+                const fontName = file.name.replace(/\.[^/.]+$/, "");
+
+                await loadFont(file, fontName, file);
+            }
         }
+
+        loadFontURLStatus.textContent = "檔案處理完成！";
+
+    } catch (error) {
+        loadFontURLStatus.textContent = `載入失敗：${error.message}`;
+
+        console.error("Failed to upload font:", error);
+
     }
 
     fontUpload.value = "";
