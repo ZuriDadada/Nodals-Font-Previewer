@@ -76,7 +76,7 @@ async function loadZip(file, fileName = "遠端 ZIP") {
         }, 0);
 
         if (totalSize > maxExtractedSize) {
-            throw new Error("解壓縮後的字體總大小超過 100 MB");
+            throw new Error("解壓縮後的字體總大小超過 500 MB");
         }
 
         let loadedCount = 0;
@@ -195,15 +195,17 @@ loadFontURLButton.addEventListener("click", async () => {
         loadFontURLStatus.textContent = "字體載入成功！";
         fontURL.value = "";
 
-    } catch (error) {
-        loadFontURLStatus.textContent =
-            "載入失敗，請檢查網址或伺服器的跨來源存取設定";
 
-        console.error("Failed to load remote font:", error);
+        } catch (error) {
+            loadFontURLStatus.textContent =
+                `載入失敗：${error.message}`;
 
-    } finally {
-        loadFontURLButton.disabled = false;
-    }
+            console.error("Failed to load remote font:", error);
+
+        } finally {
+            loadFontURLButton.disabled = false;
+               }
+    
 });
 
 // Update font list
