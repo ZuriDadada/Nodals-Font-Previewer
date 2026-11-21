@@ -48,12 +48,12 @@ async function loadFont(blob, fontName, file = null) {
 
 // Load fonts from ZIP
 
-async function loadZip(file) {
+async function loadZip(file, fileName = "遠端 ZIP") {
     const maxZipSize = 20 * 1024 * 1024;
     const maxExtractedSize = 100 * 1024 * 1024;
 
     if (file.size > maxZipSize) {
-        console.warn("ZIP file is too large:", file.name);
+        console.warn("ZIP file is too large:", fileName);
         return;
     }
 
@@ -68,7 +68,7 @@ async function loadZip(file) {
         });
 
         if (fontFiles.length === 0) {
-            console.warn("No supported fonts found:", file.name);
+            console.warn("No supported fonts found:", fileName);
             return;
         }
 
@@ -78,7 +78,7 @@ async function loadZip(file) {
         }, 0);
 
         if (totalSize > maxExtractedSize) {
-            console.warn("Extracted fonts are too large:", file.name);
+            console.warn("Extracted fonts are too large:", fileName);
             return;
         }
 
@@ -92,7 +92,7 @@ async function loadZip(file) {
         }
 
     } catch (error) {
-        console.error("Failed to load ZIP:", file.name, error);
+        console.error("Failed to load ZIP:", fileName, error);
     }
                             }
 
@@ -103,7 +103,7 @@ fontUpload.addEventListener("change", async (event) => {
 
     for (const file of files) {
     if (/\.zip$/i.test(file.name)) {
-        await loadZip(file);
+        await loadZip(file, file.name);
     } else {
         const fontName = file.name.replace(/\.[^/.]+$/, "");
 
