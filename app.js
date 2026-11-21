@@ -53,8 +53,7 @@ async function loadZip(file, fileName = "遠端 ZIP") {
     const maxExtractedSize = 100 * 1024 * 1024;
 
     if (file.size > maxZipSize) {
-        console.warn("ZIP file is too large:", fileName);
-        return;
+        throw new Error("ZIP 檔案超過 20 MB");
     }
 
     try {
@@ -68,8 +67,7 @@ async function loadZip(file, fileName = "遠端 ZIP") {
         });
 
         if (fontFiles.length === 0) {
-            console.warn("No supported fonts found:", fileName);
-            return;
+            throw new Error("ZIP 中找不到支援的字體檔案");
         }
 
         // Check total uncompressed size
@@ -78,9 +76,10 @@ async function loadZip(file, fileName = "遠端 ZIP") {
         }, 0);
 
         if (totalSize > maxExtractedSize) {
-            console.warn("Extracted fonts are too large:", fileName);
-            return;
+            throw new Error("解壓縮後的字體總大小超過 100 MB");
         }
+
+        let loadedCount = 0;
 
         for (const entry of fontFiles) {
             const blob = await entry.async("blob");
@@ -88,10 +87,18 @@ async function loadZip(file, fileName = "遠端 ZIP") {
             const fontFileName = entry.name.split("/").pop();
             const fontName = fontFileName.replace(/\.[^/.]+$/, "");
 
-            await loadFont(blob, fontName);
+            const loaded = await loadFont(blob, fontName);
+
+            if (!loaded) {
+                throw new Error(`字體載入失敗或已存在：${fontName}`);
+            }
+
+            loadedCount++;
         }
 
-        } catch (error) {
+        return loadedCount;
+
+    } catch (error) {
         console.error("Failed to load ZIP:", fileName, error);
         throw error;
     }
@@ -111,7 +118,11 @@ fontUpload.addEventListener("change", async (event) => {
             } else {
                 const fontName = file.name.replace(/\.[^/.]+$/, "");
 
-                await loadFont(file, fontName, file);
+                const loaded = await loadFont(file, fontName, file);
+
+                if (!loaded) {
+                    throw new Error(`字體載入失敗或已存在：${fontName}`);
+                }
             }
         }
 
@@ -121,7 +132,6 @@ fontUpload.addEventListener("change", async (event) => {
         loadFontURLStatus.textContent = `載入失敗：${error.message}`;
 
         console.error("Failed to upload font:", error);
-
     }
 
     fontUpload.value = "";
