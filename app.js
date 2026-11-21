@@ -161,12 +161,20 @@ loadFontURLButton.addEventListener("click", async () => {
         }
 
         const blob = await response.blob();
-        objectURL = URL.createObjectURL(blob);
 
-        const fontFace = new FontFace(
-            fontName,
-            `url("${objectURL}")`
-        );
+        if (/\.zip$/i.test(fileName)) {
+            await loadZip(blob, fileName);
+
+            fontURLStatus.textContent = "ZIP 檔案處理完成！";
+            fontURL.value = "";
+            return;
+        }
+
+        const loaded = await loadFont(blob, fontName);
+
+        if (!loaded) {
+            throw new Error("字體載入失敗或已經存在");
+        }
 
         await fontFace.load();
         document.fonts.add(fontFace);
