@@ -85,8 +85,8 @@ async function loadZip(file, fileName = "遠端 ZIP") {
         for (const entry of fontFiles) {
             const blob = await entry.async("blob");
 
-            const fileName = entry.name.split("/").pop();
-            const fontName = fileName.replace(/\.[^/.]+$/, "");
+            const fontFileName = entry.name.split("/").pop();
+            const fontName = fontFileName.replace(/\.[^/.]+$/, "");
 
             await loadFont(blob, fontName);
         }
