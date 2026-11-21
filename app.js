@@ -49,11 +49,11 @@ async function loadFont(blob, fontName, file = null) {
 // Load fonts from ZIP
 
 async function loadZip(file, fileName = "遠端 ZIP") {
-    const maxZipSize = 20 * 1024 * 1024;
-    const maxExtractedSize = 100 * 1024 * 1024;
+    const maxZipSize = 100 * 1024 * 1024;
+    const maxExtractedSize = 500 * 1024 * 1024;
 
     if (file.size > maxZipSize) {
-        throw new Error("ZIP 檔案超過 20 MB");
+        throw new Error("ZIP 檔案超過 100 MB");
     }
 
     try {
